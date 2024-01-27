@@ -7,13 +7,15 @@ const Todo = require("../schemas/todoSchema");
 
 // post a todo
 router.post("/", async (req, res) => {
-  const {title, description, status} = req.body;
   try {
-    const todo = await Todo.create({title, description, status});
-    res.status(200).json(todo)
+    const { title, description, status } = req.body;
+    // const todo = await Todo.create({title, description, status});
+    // res.status(201).json(todo);
+    const todo = new Todo({ title, description, status })
+    const result = await todo.save();
+    res.status(201).json(result);
   } catch (err) {
-    res.status(400).json({error: err.message})
-
+    res.status(400).json({ error: err.message });
   }
 
   /* const newTodo = new Todo(req.body); //validate your data with your schema
