@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const todoSchema = mongoose.Schema({
+const todoSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
@@ -15,3 +15,6 @@ const todoSchema = mongoose.Schema({
     default: Date.now,
   },
 });
+
+// module.exports = todoSchema
+module.exports = mongoose.model("Todo", todoSchema)
