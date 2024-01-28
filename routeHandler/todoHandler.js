@@ -38,12 +38,32 @@ router.get("/:id", async (req, res) => {});
 
 // update todo
 router.put("/:id", async (req, res) => {
-  try{
+  // method 1
+ /*  try{
     const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     res.json(todo);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  } */
+
+  // method 2
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const result = await Todo.updateOne({ _id: id }, { $set: updateData });
+
+    if (result.nModified === 0) {
+      // If no document was modified, it means the document was not found
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    // Fetch the updated document
+    const updatedTodo = await Todo.findById(id);
+    res.json(updatedTodo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 
@@ -51,3 +71,26 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {});
 
 module.exports = router;
+
+/* 
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+
+    const result = await Todo.updateOne({ _id: id }, { $set: updateData });
+
+    if (result.nModified === 0) {
+      // If no document was modified, it means the document was not found
+      return res.status(404).json({ message: "Todo not found" });
+    }
+
+    // Fetch the updated document
+    const updatedTodo = await Todo.findById(id);
+    res.json(updatedTodo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+ */
