@@ -34,7 +34,15 @@ router.post("/", async (req, res) => {
 });
 
 // post multiple todo
-router.post("/all", async (req, res) => {});
+router.post("/all", async (req, res) => {
+  try{
+    const multipleDataArray = req.body;
+    const result = await Todo.insertMany(multipleDataArray);
+    res.status(201).json(result);
+  } catch(err){
+    res.status(400).json({ error: err.message });
+  }
+});
 
 // get todos
 router.get("/", async (req, res) => {});

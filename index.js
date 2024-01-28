@@ -16,7 +16,7 @@ app.use(
 app.use(express.json());
 
 // const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.86h0qhu.mongodb.net/?retryWrites=true&w=majority`;
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.86h0qhu.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.86h0qhu.mongodb.net/collectingTodo?retryWrites=true&w=majority`;
 
 const clientOptions = {
   serverApi: { version: "1", strict: true, deprecationErrors: true },
@@ -29,9 +29,6 @@ async function run() {
   try {
     // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
     await mongoose.connect(uri, clientOptions);
-
-    /* // Application crud
-    app.use("/todo", todoHandler); */
 
     await mongoose.connection.db.admin().command({ ping: 1 });
     console.log(
