@@ -51,6 +51,26 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  // http://localhost:5000/todo?status=active
+  try {
+    const { status } = req.query;
+    const query = {};
+    
+    if (status) {
+      query.status = status;
+    }
+    // Add more conditions as needed
+
+    const todos = await Todo.find(query);
+
+    res.json(todos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 // update todo
 router.put("/:id", async (req, res) => {
   // method 1
@@ -84,7 +104,15 @@ router.put("/:id", async (req, res) => {
 });
 
 // delete todo
-router.delete("/:id", async (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  try {
+    const todo = await Todo.findByIdAndDelete(req.params.id);
+    if (!todo) return res.status(404).json({ message: "Todo not found" });
+    res.json({ message: "Todo deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 module.exports = router;
 
@@ -143,6 +171,24 @@ router.delete("/:id", async (req, res) => {
     const todo = await Todo.findByIdAndDelete(req.params.id);
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     res.json({ message: "Todo deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get("/todo", async (req, res) => {
+  try {
+    const { status, otherQueryParam } = req.query;
+    const query = {};
+    
+    if (status) {
+      query.status = status;
+    }
+    // Add more conditions as needed
+
+    const todos = await Todo.find(query);
+
+    res.json(todos);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
