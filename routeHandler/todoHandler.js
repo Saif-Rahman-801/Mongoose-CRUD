@@ -41,18 +41,27 @@ router.get("/", async (req, res) => {
 });
 
 // get a todo by id
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+  try {
+    const todo = await Todo.findById(req.params.id);
+    if (!todo) return res.status(404).json({ message: "Todo not found" });
+    res.json(todo);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
 // update todo
 router.put("/:id", async (req, res) => {
   // method 1
- /*  try{
+ /* try{
     const todo = await Todo.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     res.json(todo);
   } catch (err) {
     res.status(400).json({ error: err.message });
-  } */
+  } 
+ */
 
   // method 2
   try {
