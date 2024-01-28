@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
   try {
     const todos = await Todo.find().select({
       _id:0
-    });
+    });// can also set limit using .limit(2)
     res.json(todos);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -111,6 +111,29 @@ router.delete("/:id", async (req, res) => {
     const todo = await Todo.findByIdAndDelete(req.params.id);
     if (!todo) return res.status(404).json({ message: "Todo not found" });
     res.json({ message: "Todo deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.delete("/", async (req, res) => {
+  http://localhost:5000/todo?status=inactive
+  try {
+    const { status } = req.query;
+    const query = {};
+    
+    if (status) {
+      query.status = status;
+    }
+    // Add more conditions as needed
+
+    const result = await Todo.deleteMany(query);
+
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "No matching todos found" });
+    }
+
+    res.json({ message: "Todos deleted successfully", deletedCount: result.deletedCount });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
