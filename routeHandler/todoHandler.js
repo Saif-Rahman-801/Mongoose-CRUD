@@ -33,7 +33,9 @@ router.post("/all", async (req, res) => {
 // get todos
 router.get("/", async (req, res) => {
   try {
-    const todos = await Todo.find();
+    const todos = await Todo.find().select({
+      _id:0
+    });
     res.json(todos);
   } catch (error) {
     res.status(500).json({ error: error.message });
